@@ -1,0 +1,15 @@
+//Esto es lo que nos devuelve el servidor al hacer login.
+//Nos interesa el accesToken
+{
+    "code": "00",
+    "data": [
+	{"userName": "mamamurio",
+	 "tokenSecExpiration": 0,
+	 "accessToken": "4f6abb6e-4c31-4717-8e03-80fa29025879",
+	 "updatedAt": "2019-08-01T15:37:08.9930000",
+	 "idUser": "6fb61442-06aa-4cbf-932c-d5fe1ac3e78c",
+	 "email": "lordjimbo@protonmail.com"
+	}],
+    "description": "Register user: mamamurio with token: 4f6abb6e-4c31-4717-8e03-80fa29025879 "
+    , "datetime": "2019-08-01T18:29:01.704710"
+}
