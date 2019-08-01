@@ -15,7 +15,7 @@ los datos, que se llama apikey.json e importarlos a este script
 api_data_fl = "./apikey.json"
 api_data = {}
 
-print(f'[+] Leyendo los datos de nuestras sesion en la api de: {api_data_fl}')
+print(f'[+] Leyendo los datos de nuestra sesion en la api de: {api_data_fl}')
 
 try:
     with open(api_data_fl, "r") as f:

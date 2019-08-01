@@ -1,4 +1,7 @@
 #estos son los archivos que le decimos a git que tiene que ignorar
+
+#estas son las copias de seguridad que hacen los editores de texto
 *~
 \.#*#
-#estas son las copias de seguridad que hacen los editores de texto
+#esto es que ignore todos los archivos en la carpeta llamada test
+*tests*
