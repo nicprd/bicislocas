@@ -1,5 +1,3 @@
-//Esto es lo que nos devuelve el servidor al hacer login.
-//Nos interesa el accesToken
 {
     "code": "00",
     "data": [
