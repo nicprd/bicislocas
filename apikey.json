@@ -1,13 +1,1 @@
-{
-    "code": "00",
-    "data": [
-	{"userName": "mamamurio",
-	 "tokenSecExpiration": 0,
-	 "accessToken": "4f6abb6e-4c31-4717-8e03-80fa29025879",
-	 "updatedAt": "2019-08-01T15:37:08.9930000",
-	 "idUser": "6fb61442-06aa-4cbf-932c-d5fe1ac3e78c",
-	 "email": "lordjimbo@protonmail.com"
-	}],
-    "description": "Register user: mamamurio with token: 4f6abb6e-4c31-4717-8e03-80fa29025879 "
-    , "datetime": "2019-08-01T18:29:01.704710"
-}
+{"code": "01", "data": [{"userName": "mamamurio", "tokenSecExpiration": 984, "accessToken": "99e6d128-a139-4706-95be-1a34b71c0db7", "updatedAt": "2019-08-01T15:37:08.9930000", "internalUser": "bG9yZGppbWJvQHByb3Rvbm1haWwuY29tOkVsaXNlb3luaWNvbGFzMA==", "idUser": "6fb61442-06aa-4cbf-932c-d5fe1ac3e78c", "email": "lordjimbo@protonmail.com"}], "description": "Token 99e6d128-a139-4706-95be-1a34b71c0db7 extend  into control-cache", "datetime": "2019-08-02T17:48:36.893075"}

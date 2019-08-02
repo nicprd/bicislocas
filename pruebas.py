@@ -60,7 +60,7 @@ except Exception as e:
     print(f'Algo fue mal: {e}')
     exit(-1)
 
-print("Vamos a ver cuantas bicis estan disponibles en cada estacion!")
+print("Vamos a ver cuantas bicis estan disponibles en la estacion de sol!")
 
 def parseStationAndPrint(s):
     print(f'[{s["id"]}] En la estacion{s["name"]} quedan {s["dock_bikes"]} porque han cogido {s["free_bases"]}')
@@ -69,8 +69,8 @@ try:
     api_url = "https://openapi.emtmadrid.es/v1/"
     url = api_url + "transport/bicimad/stations/"
     a = req.get(url, headers = head)
-    for i in a.json()["data"]:
-        parseStationAndPrint(i)
+    i = a.json()["data"][0]
+    parseStationAndPrint(i)
 except Exception as e:                                                  
     print(f'Algo fue mal: {e}')                                         
     exit(-1)   
