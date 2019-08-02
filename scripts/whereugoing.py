@@ -62,11 +62,36 @@ def get_name_id(sid):
             return i["name"]
     raise "El id de estacion no existe"
 
-#mirar mas abajo la estructura de la lista de inicios
-def check_end_start(starts, end_id):
+
+
+#VAMOS AL MEOLLO
+"""
+
+Lo importante aqui es la forma en la que guardamos los datos
+de los posibles destinos. 
+Tenemos un Array, que guarda Arrays que guardan conjuntos de viajes posibles.
+
+tra_sta = [C1, C2, ...]
+
+Un conjunto de viajes posibles C1, tiene esta estructura:
+
+C1 = [Inicio, [F1, F2, ...]] Donde F1 es un final posible 
+
+Inicio = [id, time] id es el id de la estacion segun BICIMAD, 
+                    time es el tiempo de inicio del viaje,
+
+F1 = [id, dist, traveltime] id es el id de la estacion segun BICIMAD
+                            dist es la distancia en Km entre INICIO y F1
+                            traveltime es el tiempo entre inicio y F1
+
+"""
+
+
+#travels es el array de viajes posibles
+def check_end_start(travels, end_id):
     loc_end = get_location_id(end_id)
     time_end = datetime.now()
-    for i in starts:
+    for i in travels:
         loc_st = get_location_id(i[0][0])
         time = time_end - i[0][1]
         dist = geopy.distance.distance(loc_st,loc_end)
@@ -100,19 +125,6 @@ def print_travels(travels):
 ##############################################
 
 tra_sta = []
-"""[
-
-[[id_st, t], [    //inicio de viaje : [posibles finales]
-              [id_dest, dist, time]
-              [id_dest2, dist2, time2]
-             ]
-],
-[inicio de viaje 2]
-]
-"""
-tra_end = []
-
-
 
 stations = get_stat_by_id()
 while(True):
@@ -128,6 +140,6 @@ while(True):
         if stations[s_id]["free_bases"] == (i["free_bases"] -1) :
             check_end_start(tra_sta, s_id)
             change += 1
-    if change != 0: 
+    if change != 0: #Aunque esta condicion parece absurda, creedme no lo es
         stations = get_stat_by_id()
     
