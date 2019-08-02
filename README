@@ -1,0 +1,22 @@
+1- apikey.JSON 
+  contiene el mensaje que devuelve el servidor de BICIMAD cuando haces login.
+  entre ello, la api KEY!!!
+2- getapi.py
+  como la llave caduca, aqui hay un script que vuelve a hacer login y deja todos
+  los datos guardados en su sitio
+3-pruebas.py
+  Si algo no va bien, corre este script. Pregunta al servidor whoami, y busca cuantas
+  bicis quedan en sol. 
+  ¡Aqui puedes ver si ha caducado la llave de la api!
+  
+
+
+SCRIPTS
+  PEqueñas tonterias para ver posibilidades.
+4- whereugoing.py
+  Intenta adivinar posibles trayectos realizandose sabiendo solo donde aparece una bici
+  y donde se pierde una bici.
+  Un output tipo es:
+      [0] Viaje desde Banco de España A a las 2019-08-02 19:23:06.121910
+[ ]-[0] Posible final en: Glorieta de los Cuatro Caminos, un minimo de 3.1477510864876233 km en 0:00:00.000276 horas. Velocidad de: 41057622.867229864 km
+[ ]-[1] Posible final en: Embajadores-Cáceres, un minimo de 2.188558417639914 km en 0:00:00.002608 horas. Velocidad de: 3021016.220668593 km
