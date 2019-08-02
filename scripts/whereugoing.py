@@ -99,6 +99,14 @@ def check_end_start(travels, end_id):
         i[1].append(data)
 
 
+def check_reasonable(travels):
+    for i in travels:
+        for e in i[1]:
+            vel = e[1]/(e[2].total_seconds()/60)
+            vel *= 60
+            if vel > 25:
+                i[1].remove(e)
+                
 import os
 import sys
 
@@ -115,11 +123,11 @@ def print_travels(travels):
         for n2, e in enumerate(i[1]):
             loc = get_name_id(e[0])
             dist = e[1]
-            time = e[2]
-            vel = (dist/time.total_seconds())*3600
-            print(f"[ ]-[{n2}] Posible final en: {loc}, un minimo de {dist} en {time} horas. Velocidad de: {vel}")
-
-            
+            time = e[2].total_seconds()/60
+            vel = (dist/time)*60
+            print(f"[ ]-[{n2}] Posible final en: {loc}, un minimo de {dist} en {round(time,2)} minutos")
+            print(f'[ ]-[ ] Velocidad de: {vel}/h')
+        
 ################################################
 ############## MAIN LOOP ######################
 ##############################################
@@ -128,7 +136,6 @@ tra_sta = []
 
 stations = get_stat_by_id()
 while(True):
-    print_travels(tra_sta)
     a = get_all_stations()
     change = 0
     for i in a:
@@ -142,4 +149,6 @@ while(True):
             change += 1
     if change != 0: #Aunque esta condicion parece absurda, creedme no lo es
         stations = get_stat_by_id()
+    check_reasonable(tra_sta)
+    print_travels(tra_sta)
     
