@@ -34,12 +34,7 @@ print("OK!")
 def get_all_stations():
     api_url = "https://openapi.emtmadrid.es/v1/"
     url = api_url + "transport/bicimad/stations/"
-    try:
-        return req.get(url, headers = API_KEY).json()["data"]
-    except Exception as e:
-        print("Error conectando con la api:", e)
-        exit(-1)
-
+    return req.get(url, headers = API_KEY).json()["data"]
 
 #para ahorrar en calculos creamos esta variable global.
 #################GLOBAL VARIABLE#############
