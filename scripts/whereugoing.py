@@ -27,17 +27,16 @@ try:
     API_KEY = get_api_key()####
 except Exception as e:
     print(f"[!] Error : {e}")
+    key = input(f"[!] Introduce manualmente una apiKey de la EMT: ")
+    API_KEY = {"accessToken" : key}
 print("OK!")
 
 
 def get_all_stations():
     api_url = "https://openapi.emtmadrid.es/v1/"
     url = api_url + "transport/bicimad/stations/"
-    try:
-        return req.get(url, headers = API_KEY).json()["data"]
-    except Exception as e:
-        print("Error conectando con la api:", e)
-        exit(-1)
+    return req.get(url, headers = API_KEY).json()["data"]
+
 
 
 #para ahorrar en calculos creamos esta variable global.
@@ -111,12 +110,18 @@ class travel:
         b = f"Recorridos {self.dist} en {round(self.time,2)} mins. ({self.vel}/h)"
         return a + b
 
+#side efects modify end to delete ends without starts 
 def getPossibleTravels(sta, end):
+    sta_cpy = sta.copy()
+    end_cpy = end.copy()
     travels = []
     for i in sta:
-        for e in end:
+        for e in end_cpy:
             if i.isMatch(e):
                 travels.append(travel(i,e))
+                end_cpy.remove(e)
+    for i in end_cpy:
+        end.remove(i)
     return travels
 
 starts = []
