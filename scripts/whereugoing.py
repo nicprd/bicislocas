@@ -27,6 +27,7 @@ try:
     API_KEY = get_api_key()####
 except Exception as e:
     print(f"[!] Error : {e}")
+    exit(-1)
 print("OK!")
 
 
