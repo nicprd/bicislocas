@@ -1,42 +1,53 @@
-"""
-Cuando una bici se pierde de algun sitio rastreamos hasta
-esperar donde aparece una nueva bici.
-Calculamos el tiempo que tarda hasta que aparece una nueva bici
-medimos la distancia entre las dos estaciones.
-Calculamos si es un tiempo razonable de destino.
-Asumimos como destino o seguimos esperando un nuevo destino
-"""
-
-"""
-TODO: LA ruta sensata la mediremos en km/h 
-      Crearemos un conjunto de rutas sensatas para cada nueva ruta que se abre
-"""
-
 import requests as req
 import json
 from datetime import datetime
 #para medir distancias entre coordenadas
 import geopy.distance 
+import platform 
+import os
 
+print("Inicializando las variables del script")
+
+###utility for clearing the screen##
+def clearscreen():
+    if platform.system() == 'Windows':
+        os.system("cls")
+    else:
+        os.system("clear")
+#utility for reading the apiKEY
 def get_api_key():
     with open("../apikey.json", "r") as f:
         api_data = json.load(f)
     key = api_data["data"][0]["accessToken"]
     return {"accessToken" : key}
 
-#######GLOBAL VARIABLE#####
-API_KEY = get_api_key()####
-###########################
+print("Leyendo la llave de la api...", end= "")
+#######GLOBAL VARIABLE##### Mas facil para todos si es asi. 
+try:
+    API_KEY = get_api_key()####
+except Exception as e:
+    print(f"[!] Error : {e}")
+print("OK!")
+
 
 def get_all_stations():
     api_url = "https://openapi.emtmadrid.es/v1/"
     url = api_url + "transport/bicimad/stations/"
-    return req.get(url, headers = API_KEY).json()["data"]
+    try:
+        return req.get(url, headers = API_KEY).json()["data"]
+    except Exception as e:
+        print("Error conectando con la api:", e)
+        exit(-1)
+
 
 #para ahorrar en calculos creamos esta variable global.
 #################GLOBAL VARIABLE#############
-REFERENCE_STATIONS = get_all_stations()  ####
-#############################################
+print("Comprobando la conexion con biciMad... ", end="")
+try:
+    REFERENCE_STATIONS = get_all_stations()  ####
+except Exception as e:
+    print(f"Error conectando con BiciMad: {e})")
+print("OK!")
 
 def get_stat_by_id():
     #guardamos las estaciones como un diccionario { idNumerico : {}}
@@ -50,89 +61,73 @@ def get_stat_by_id():
         for i in get_all_stations()
     }
 
-def get_location_id(sid):
+def get_pos_id(sid):
     for i in REFERENCE_STATIONS: 
         if i["id"] == sid:
             return i["geometry"]["coordinates"]
     raise "El id de estacion no existe"
 
-def get_name_id(sid):
+def get_name(sid):
     for i in REFERENCE_STATIONS: 
         if i["id"] == sid:
             return i["name"]
     raise "El id de estacion no existe"
 
 
+#una ubicacion y tiempo de una bici cogida o dejada.
+class bikeStamp:
+    def __init__(self,sid):
+        self.sid = sid
+        self.time = datetime.now()
+        self.pos = get_pos_id(sid)
 
-#VAMOS AL MEOLLO
-"""
+    def getRelDist(self,bikeS): #getRelativeDistance
+        return geopy.distance.distance(self.pos,bikeS.pos)
 
-Lo importante aqui es la forma en la que guardamos los datos
-de los posibles destinos. 
-Tenemos un Array, que guarda Arrays que guardan conjuntos de viajes posibles.
+    def getRelTime(self,bikeS): #getRelativeTime
+        return self.time - bikeS.time
 
-tra_sta = [C1, C2, ...]
+    def getRelVel(self,bikeS): #getRelativeVelocity
+        dist = self.getRelDist(bikeS)
+        time = self.getRelTime(bikeS).total_seconds()
+        return dist*3600/time
 
-Un conjunto de viajes posibles C1, tiene esta estructura:
+    def isMatch(self,bikeS):
+        a = self.getRelVel(bikeS) < 20
+        b = self.getRelVel(bikeS) > 0
+        return a & b
 
-C1 = [Inicio, [F1, F2, ...]] Donde F1 es un final posible 
+class travel:
+    def __init__(self, bike1, bike2):
+        self.startPos = bike1.sid
+        self.endPos = bike2.sid
+        self.startTime = bike1.time
+        self.endTime = bike2.time
+        self.time = bike1.getRelTime(bike2).total_seconds()/60
+        self.dist = bike1.getRelDist(bike2)
+        self.vel = bike1.getRelVel(bike2)
+    def __str__(self):
+        a = f"Viaje desde {get_name(self.startPos)} hacia {get_name(self.endPos)}.\n"
+        b = f"Recorridos {self.dist} en {round(self.time,2)} mins. ({self.vel}/h)"
+        return a + b
 
-Inicio = [id, time] id es el id de la estacion segun BICIMAD, 
-                    time es el tiempo de inicio del viaje,
+def getPossibleTravels(sta, end):
+    travels = []
+    for i in sta:
+        for e in end:
+            if i.isMatch(e):
+                travels.append(travel(i,e))
+    return travels
 
-F1 = [id, dist, traveltime] id es el id de la estacion segun BICIMAD
-                            dist es la distancia en Km entre INICIO y F1
-                            traveltime es el tiempo entre inicio y F1
+starts = []
+ends = []
+travels = []
 
-"""
+print("Vamos a buscar posibles viajes en BiciMad.")
+print("Esto puede tardar unos momentos.")
+print("¡Tanto como un viaje en bici!")
+print("...........................Script por lordjimbo@protonmail.com ")
 
-
-#travels es el array de viajes posibles
-def check_end_start(travels, end_id):
-    loc_end = get_location_id(end_id)
-    time_end = datetime.now()
-    for i in travels:
-        loc_st = get_location_id(i[0][0])
-        time = time_end - i[0][1]
-        dist = geopy.distance.distance(loc_st,loc_end)
-        data = [end_id, dist, time]
-        i[1].append(data)
-
-
-def check_reasonable(travels):
-    for i in travels:
-        for e in i[1]:
-            vel = e[1]/(e[2].total_seconds()/60)
-            vel *= 60
-            if vel > 25:
-                i[1].remove(e)
-                
-import os
-import sys
-
-def print_travels(travels):
-    os.system("clear")
-    print("$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$")
-    print("$$$             BICIMAD BLIND TRACKER            $$$$")
-    print("$$$______________________________________________$$$$\n")
-    print(f'\r[!] Estos son los posibles viajes que hemos encontrado:')
-    sys.stdout.flush()
-    for n, i in enumerate(travels):
-        st_loc = get_name_id(i[0][0])
-        print(f"[{n}] Viaje desde {st_loc} a las {i[0][1]}")
-        for n2, e in enumerate(i[1]):
-            loc = get_name_id(e[0])
-            dist = e[1]
-            time = e[2].total_seconds()/60
-            vel = (dist/time)*60
-            print(f"[ ]-[{n2}] Posible final en: {loc}, un minimo de {dist} en {round(time,2)} minutos")
-            print(f'[ ]-[ ] Velocidad de: {vel}/h')
-        
-################################################
-############## MAIN LOOP ######################
-##############################################
-
-tra_sta = []
 
 stations = get_stat_by_id()
 while(True):
@@ -141,14 +136,18 @@ while(True):
     for i in a:
         s_id = i["id"]
         if stations[s_id]["dock_bikes"] == (i["dock_bikes"] -1) :
-            data = [s_id, datetime.now()]
-            tra_sta.append([data,[]])
+            starts.append(bikeStamp(s_id))
             change += 1
         if stations[s_id]["free_bases"] == (i["free_bases"] -1) :
-            check_end_start(tra_sta, s_id)
+            ends.append(bikeStamp(s_id))
             change += 1
     if change != 0: #Aunque esta condicion parece absurda, creedme no lo es
         stations = get_stat_by_id()
-    check_reasonable(tra_sta)
-    print_travels(tra_sta)
+        travels = getPossibleTravels(starts,ends)
+        if len(travels) > 0:
+            clearscreen()   
+            print("Hemos encontrado los siguientes viajes:" )
+            [print(f'[{i}] {e}') for i, e in enumerate(travels)]
+            
+        
     
