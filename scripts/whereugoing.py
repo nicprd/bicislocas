@@ -120,8 +120,9 @@ def getPossibleTravels(sta, end):
             if i.isMatch(e):
                 travels.append(travel(i,e))
                 end_cpy.remove(e)
-    for i in end_cpy:
-        end.remove(i)
+    #por algun modo el codigo de abajo para todo. 
+    #for i in end_cpy:
+    #   end.remove(i)
     return travels
 
 starts = []
