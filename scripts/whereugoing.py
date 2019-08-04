@@ -96,6 +96,18 @@ class bikeStamp:
         b = self.getRelVel(bikeS) > 0
         return a & b
 
+    def getBetterMatch(self, bikeS, bikeS2):
+        dist1= self.getRelDist(bikeS) 
+        dist2= self.getRelDist(bikeS2)
+        vel1= self.getRelVel(bikeS) 
+        vel2= self.getRelVel(bikeS2) 
+
+        if self.isMatch(bikeS) & self.isMatch(bikeS2):
+            match = bikeS if dist1 > dist2 else bikeS2
+        else: 
+            match = bikeS if self.isMatch(bikeS) else bikeS2
+        return match
+
 class travel:
     def __init__(self, bike1, bike2):
         self.startPos = bike1.sid
@@ -125,6 +137,19 @@ def getPossibleTravels(sta, end):
     #   end.remove(i)
     return travels
 
+def getPossibleTravels_t(sta, end):
+    end_cpy = end.copy()
+    travels = []
+    for i in sta:
+        if len(end_cpy) < 1: return travels
+        top_match = end_cpy[0] 
+        for e in end_cpy:
+         top_match = i.getBetterMatch(top_match, e)
+        if i.isMatch(top_match): travels.append(travel(i, top_match))
+        end_cpy.remove(top_match)
+    end = end_cpy
+    return travels
+    
 starts = []
 ends = []
 travels = []
@@ -149,10 +174,10 @@ while(True):
             change += 1
     if change != 0: #Aunque esta condicion parece absurda, creedme no lo es
         stations = get_stat_by_id()
-        travels = getPossibleTravels(starts,ends)
+        travels = getPossibleTravels_t(starts,ends)
         if len(travels) > 0:
             clearscreen()   
-            print("Hemos encontrado los siguientes viajes:" )
+            print("Estas son las mejores sugerencias de viajes (Dale tiempo para que muestre algo razonable):" )
             [print(f'[{i}] {e}') for i, e in enumerate(travels)]
             
         
