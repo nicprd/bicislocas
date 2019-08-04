@@ -17,7 +17,7 @@ def clearscreen():
 print("Inicializando las variables del script")
 
 #utility for reading the apiKEY
-def get_api_key(file="../apikey.json""):
+def get_api_key(file="../apikey.json"):
     with open(file, "r") as f:
         api_data = json.load(f)
         key = api_data["data"][0]["accessToken"]
