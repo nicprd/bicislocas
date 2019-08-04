@@ -27,8 +27,12 @@ try:
     API_KEY = get_api_key()####
 except Exception as e:
     print(f"[!] Error : {e}")
+<<<<<<< HEAD
     key = input(f"[!] Introduce manualmente una apiKey de la EMT: ")
     API_KEY = {"accessToken" : key}
+=======
+    exit(-1)
+>>>>>>> 09017801743f7c8ae03467fb83757de51761bce4
 print("OK!")
 
 
@@ -36,8 +40,11 @@ def get_all_stations():
     api_url = "https://openapi.emtmadrid.es/v1/"
     url = api_url + "transport/bicimad/stations/"
     return req.get(url, headers = API_KEY).json()["data"]
+<<<<<<< HEAD
 
 
+=======
+>>>>>>> 09017801743f7c8ae03467fb83757de51761bce4
 
 #para ahorrar en calculos creamos esta variable global.
 #################GLOBAL VARIABLE#############
