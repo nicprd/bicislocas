@@ -6,55 +6,54 @@ import geopy.distance
 import platform 
 import os
 
-print("Inicializando las variables del script")
-
+"""Some utilities"""
 ###utility for clearing the screen##
 def clearscreen():
     if platform.system() == 'Windows':
         os.system("cls")
     else:
         os.system("clear")
+
+print("Inicializando las variables del script")
+
 #utility for reading the apiKEY
-def get_api_key():
-    with open("../apikey.json", "r") as f:
+def get_api_key(file="../apikey.json""):
+    with open(file, "r") as f:
         api_data = json.load(f)
-    key = api_data["data"][0]["accessToken"]
+        key = api_data["data"][0]["accessToken"]
     return {"accessToken" : key}
 
-print("Leyendo la llave de la api...", end= "")
-#######GLOBAL VARIABLE##### Mas facil para todos si es asi. 
+
+print("Leyendo la llave de la api...")
+
+"""GLOBAL VARIABLES"""# Mas facil para todos si es asi. 
 try:
-    API_KEY = get_api_key()####
-except Exception as e:
+    API_KEY = get_api_key()
+    print("[+] OK!")
+except OSError as e:
     print(f"[!] Error : {e}")
-<<<<<<< HEAD
-    key = input(f"[!] Introduce manualmente una apiKey de la EMT: ")
+    key = input(f"Introduce manualmente una apiKey de la EMT: ")
     API_KEY = {"accessToken" : key}
-=======
-    exit(-1)
->>>>>>> 09017801743f7c8ae03467fb83757de51761bce4
-print("OK!")
 
 
 def get_all_stations():
     api_url = "https://openapi.emtmadrid.es/v1/"
     url = api_url + "transport/bicimad/stations/"
-    return req.get(url, headers = API_KEY).json()["data"]
-<<<<<<< HEAD
-
-
-=======
->>>>>>> 09017801743f7c8ae03467fb83757de51761bce4
+    data = req.get(url, headers = API_KEY).json()
+    if data["code"] != "02":
+        raise ValueError(f"El servidor de BiciMad ha respondido con error: {data['code']}.\nComprueba la apiKey")
+    return data["data"]
 
 #para ahorrar en calculos creamos esta variable global.
-#################GLOBAL VARIABLE#############
-print("Comprobando la conexion con biciMad... ", end="")
+print("Comprobando la conexion con biciMad... ")
 try:
     REFERENCE_STATIONS = get_all_stations()  ####
-except Exception as e:
-    print(f"Error conectando con BiciMad: {e})")
-print("OK!")
+except ValueError as e:
+    print(f"[!] Error conectando con BiciMad: {e})")
+    exit(-1)
+print("[+] OK!")
 
+""""funciones que usamos para trabajar con os datos de BiciMad""""
 def get_stat_by_id():
     #guardamos las estaciones como un diccionario { idNumerico : {}}
     #asi se vuelve mas facil acceder a la estacion sin iterar toda la lista
@@ -79,7 +78,7 @@ def get_name(sid):
             return i["name"]
     raise "El id de estacion no existe"
 
-
+""" Definimos las clases con las que vamos a trabajar"""
 #una ubicacion y tiempo de una bici cogida o dejada.
 class bikeStamp:
     def __init__(self,sid):
@@ -157,16 +156,16 @@ def getPossibleTravels_t(sta, end):
     end = end_cpy
     return travels
     
-starts = []
-ends = []
-travels = []
+"""Main loop"""
 
 print("Vamos a buscar posibles viajes en BiciMad.")
 print("Esto puede tardar unos momentos.")
 print("¡Tanto como un viaje en bici!")
 print("...........................Script por lordjimbo@protonmail.com ")
 
-
+starts = []
+ends = []
+travels = []
 stations = get_stat_by_id()
 while(True):
     a = get_all_stations()
