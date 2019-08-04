@@ -40,7 +40,7 @@ def get_all_stations():
     api_url = "https://openapi.emtmadrid.es/v1/"
     url = api_url + "transport/bicimad/stations/"
     data = req.get(url, headers = API_KEY).json()
-    if data["code"] != "02":
+    if data["code"] != "0":
         raise ValueError(f"El servidor de BiciMad ha respondido con error: {data['code']}.\nComprueba la apiKey")
     return data["data"]
 
@@ -53,7 +53,7 @@ except ValueError as e:
     exit(-1)
 print("[+] OK!")
 
-""""funciones que usamos para trabajar con os datos de BiciMad""""
+"""funciones que usamos para trabajar con os datos de BiciMad"""
 def get_stat_by_id():
     #guardamos las estaciones como un diccionario { idNumerico : {}}
     #asi se vuelve mas facil acceder a la estacion sin iterar toda la lista
