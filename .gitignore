@@ -5,3 +5,4 @@
 \.#*#
 #esto es que ignore todos los archivos en la carpeta llamada test
 *tests*
+/.metadata/
