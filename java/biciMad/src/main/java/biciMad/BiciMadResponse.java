@@ -6,7 +6,9 @@ import com.google.gson.Gson;
 
 public class BiciMadResponse {
     String code;
-    Map<String, String> data[];
+    Map<String,String>[] data;
+    String description;
+    String datetime;
     
     public static BiciMadResponse BiciMad(String content){
         Gson gson = new Gson();

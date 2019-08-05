@@ -24,7 +24,7 @@ public class ApiCon {
     }
     private BiciMadResponse login() throws MalformedURLException, IOException{
         Map<String,String> headers = new HashMap<String, String>();
-        headers.put("user",user);
+        headers.put("email",user);
         headers.put("password", pass);
         HttpURLConnection res = Request.get(
         new URL(sourceUrl+loginUrl), headers);  
@@ -35,10 +35,10 @@ public class ApiCon {
 
     private String askApiKey() throws FailedLoginException, MalformedURLException, IOException {
         BiciMadResponse log = login();
-        if(!log.getCode().equals("01")){
+        if(!(log.getCode().equals("00") || log.getCode().equals("01")) ){
             throw new FailedLoginException(log.getCode());
         }
-        String key = log.getData()[0].get("accesToken");
+        String key = log.getData()[0].get("accessToken");
         return key;
     }
 
