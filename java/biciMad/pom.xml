@@ -27,6 +27,19 @@
     <build>
         <pluginManagement>
             <plugins>
+		<plugin>
+				<groupId>org.apache.maven.plugins</groupId>
+				<artifactId>maven-jar-plugin</artifactId>
+				<configuration>
+					<archive>
+						<manifest>
+ 							<addClasspath>true</addClasspath>
+ 					               <classpathPrefix>dependency/</classpathPrefix>
+							<mainClass>biciMad.App</mainClass>
+						</manifest>
+					</archive>
+				</configuration>
+			</plugin>
                 <plugin>
                     <groupId>org.apache.maven.plugins</groupId>
                     <artifactId>maven-checkstyle-plugin</artifactId>
