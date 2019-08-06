@@ -13,3 +13,10 @@ with open("apikey.json", "w+") as f:
     json.dump(content, f)
 
 
+ {      "routeType":"M",
+        "coordinateXFrom" : -3.701077,
+        "coordinateYFrom" : 40.4469,
+        "coordinateXTo" : -3.674902,
+        "coordinateYTo" : 40.400149,
+        "allowBike" : true,
+}

@@ -26,7 +26,7 @@ public class Request{
         StringBuffer content = new StringBuffer();
         BufferedReader reader = new BufferedReader(
             new InputStreamReader(con.getInputStream())); //transforma stream de bytes en stream de caracteres
-        String l ;
+        String l;
         while((l = reader.readLine()) != null){
             content.append(l);
         } reader.close();

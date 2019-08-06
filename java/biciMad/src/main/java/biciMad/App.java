@@ -1,6 +1,8 @@
 package biciMad;
 
 
+import java.util.HashMap;
+import java.util.Map;
 import java.util.Scanner;
 
 import javax.security.auth.login.FailedLoginException;
@@ -26,7 +28,16 @@ public final class App {
         input.close();
         try{
             ApiCon apiCon= new ApiCon(user,pass);
+            apiCon.askApiKey();
             System.out.println("Tu apikey es:" + apiCon.getKey());
+            System.out.println("La informacion sobre la estacion de Sol: ");
+            BiciMadResponse res = apiCon.getBikeStations();
+            Map<String, String> station = res.getData()[0];
+            for(Map.Entry<String, String> p : station.entrySet()){
+                System.out.println(p.getKey()+p.getValue());
+            }
+
+
         }catch (FailedLoginException  e) {
             System.out.println("La autenticacion con Bicimad Falló:");
             System.out.println(e.getMessage());
