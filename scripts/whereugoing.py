@@ -205,7 +205,7 @@ while(True):
         if len(travels) > 0:
             travels = sorted(travels, key=travel.getProb, reverse=True)
             clearscreen()   
-            print("Estas son las mejores sugerencias de viajes (Dale tiempo para que muestre algo razonable):" )
+            print("Estas son las mejores sugerencias de viajes (Dale tiempo para que muestre algo razonable):\n" )
             [print(f'[{i}] {e}') for i, e in enumerate(travels)]
             print("_____________________[DEBUGING OUTPUTS]_____________________________\n")
             
