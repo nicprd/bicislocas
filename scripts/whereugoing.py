@@ -145,10 +145,12 @@ class travel:
         return self.getProb() < self.bikeStart.getProb(bikeS2)
 
     def check_and_set(self,bikeS2):
-
+        print("[DEBUG] Cheking ", self, " [Against] ", bikeS2)
         if self.isBetterEnd(bikeS2):
             print("[DEBUG] was better!")
             self.__init__(self.bikeStart, bikeS2)
+            return True
+        return False
         
     def __str__(self):
         a = f"Viaje desde {get_name(self.startPos)} hacia {get_name(self.endPos)}.\n"
@@ -204,4 +206,5 @@ while(True):
             clearscreen()   
             print("Estas son las mejores sugerencias de viajes (Dale tiempo para que muestre algo razonable):" )
             [print(f'[{i}] {e}') for i, e in enumerate(travels)]
+            print("_____________________[DEBUGING OUTPUTS]_____________________________\n")
             
