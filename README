@@ -9,7 +9,12 @@
   bicis quedan en sol. 
   ¡Aqui puedes ver si ha caducado la llave de la api!
   
-
+4-java
+  Aqui dentro ira la aplicacion de android.
+  
+  Instrucciones, ponte dentro de la carpeta biciMad: > mvn package
+  Se crea un jar en la carpeta target, que ya puede correrse. Pero ojo, no lo muevas de sitio porque depende de dependencies.
+  
 
 SCRIPTS
   PEqueñas tonterias para ver posibilidades.
