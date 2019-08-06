@@ -180,6 +180,7 @@ print("|                                                              |")
 print("                            Script por lordjimbo@protonmail.com ")
 print(" comparamos bicis sacadas con bicis dejadas, junto con la duracion")
 print(" del trayecto estimada por la API de la EMT")
+print("_____________________[DEBUGING OUTPUTS]_____________________________\n")
 
 ends = []
 travels = []
