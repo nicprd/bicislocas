@@ -2,7 +2,7 @@ import requests
 import json 
 
 user = "lordjimbo@protonmail.com"
-pwd = "Eliseoynicolas0"
+pwd = ""
 url = "https://openapi.emtmadrid.es/v1/mobilitylabs/user/login/"
 
 reply = requests.get(url, headers = {"email": user, "password":pwd})
